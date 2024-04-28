@@ -1,0 +1,49 @@
+trait animal {
+  fn eat(int)
+}
+
+struct cat {
+  a    int
+  b, c dog
+}
+
+fn (c cat) eat(n int) (float, bool) {
+  var a float
+  var b bool
+  return a, b
+}
+
+fn foo(n int) {
+  var c = cat{
+    a: 0,
+    b: nil,
+    c: b,
+  }
+
+  c.eat(114151)
+  bar(3.14)
+
+  a.b.c = {}
+  a.b.c()
+  a, b = b, a
+
+  var a int
+
+  a = if b > 0 {
+    0x0
+  } else {
+    0.1
+  }
+
+  for a in sth {
+    if a == 0 {
+      break
+    }
+  } 
+
+  b = "Hello, Rho"
+}
+
+// TODO: Windows is the fucking best Linux!
+
+

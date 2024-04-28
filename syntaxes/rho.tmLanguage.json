@@ -1,0 +1,254 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Rho",
+	"patterns": [
+		{
+			"include": "#trait"
+		},
+		{
+			"include": "#struct"
+		},
+		{
+			"include": "#function"
+		},
+		{
+			"include": "#implement"
+		},
+		{
+			"include": "#keyword"
+		},
+		{
+			"include": "#constant"
+		},
+		{
+			"include": "#argument"
+		},
+		{
+			"include": "#assignment"
+		},
+		{
+			"include": "#expression"
+		},
+		{
+			"include": "#comment"
+		}
+	],
+	"repository": {
+		"keyword": {
+			"patterns": [
+				{
+					"name": "keyword.$1.rho",
+					"match": "\\b(nil|fn|var|struct|union|trait|int|float|bool|const|pub)\\b"
+				},
+				{
+					"name": "keyword.control.rho",
+					"match": "\\b(if|else|for|break|continue|in|return)\\b"
+				}
+			]
+		},
+		"trait": {
+			"name": "meta.definition.trait.rho",
+			"match": "(trait)\\s+(\\w+)\\s+{",
+			"captures": {
+				"1": {
+					"name": "storage.type.trait.rho"
+				},
+				"2": {
+					"name": "entity.name.type.rho"
+				}
+			}
+		},
+		"struct": {
+			"patterns": [
+				{
+					"name": "meta.definition.struct.rho",
+					"begin": "(struct|union)\\s+(\\w+)\\s+{",
+					"beginCaptures": {
+						"1": {
+							"name": "storage.type.struct.rho"
+						},
+						"2": {
+							"name": "entity.name.type.rho"
+						}
+					},
+					"end": "}",
+					"patterns": [
+						{
+							"match": "(((?:\\w+\\s*,\\s*)+)?\\w+)\\s+(\\w+)",
+							"captures": {
+								"1": {
+									"name": "variable.name.rho"
+								},
+								"3": {
+									"patterns": [
+										{
+											"include": "#keyword"
+										},
+										{
+											"name": "entity.name.type.rho",
+											"match": "\\w+"
+										}
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "meta.initialization.struct.rho",
+					"begin": "(\\w+){",
+					"beginCaptures": {
+						"1": {
+							"name": "entity.name.type.rho"
+						}
+					},
+					"end": "}",
+					"patterns": [
+						{
+							"match": "(\\w+):\\s*(\"?\\w+\"?),",
+							"captures": {
+								"1": {
+									"name": "variable.name.rho"
+								},
+								"2": {
+									"patterns": [
+										{
+											"include": "#constant"
+										},
+										{
+											"include": "#keyword",
+											"match": "\\bnil\\b"
+										},
+										{
+											"name": "variable.name.rho",
+											"match": "\\b\\w+\\b"
+										}
+									]
+								}
+							}
+						}
+					]
+				}
+			]
+		},
+		"function": {
+			"name": "meta.definition.function.rho",
+			"match": "(fn)?\\s+(\\((\\w+)\\s+(\\w+)\\))?\\s*(\\w+)\\(",
+			"captures": {
+				"1": {
+					"name": "storage.type.function.rho"
+				},
+				"3": {
+					"name": "variable.name.rho"
+				},
+				"4": {
+					"name": "entity.name.type.rho"
+				},
+				"5": {
+					"name": "entity.name.function.rho"
+				}
+			}
+		},
+		"implement": {
+			"name": "meta.definition.implement.rho",
+			"match": "\\b(impl)\\b\\s+(\\w+)\\s+(as)\\s+(\\w+)",
+			"captures": {
+				"1": {
+					"name": "keyword.impl.rho"
+				},
+				"2": {
+					"name": "entity.name.type.rho"
+				},
+				"3": {
+					"name": "keyword.as.rho"
+				},
+				"4": {
+					"name": "entity.name.type.rho"
+				}
+			}
+		},
+		"argument": {
+			"match": "(((?:\\w+\\s*,\\s*)+)?\\w+)\\s+(\\w+)",
+			"captures": {
+				"1": {
+					"name": "variable.name.rho"
+				},
+				"3": {
+					"patterns": [
+						{
+							"include": "#keyword"
+						},
+						{
+							"name": "entity.name.type.rho",
+							"match": "\\w+"
+						}
+					]
+				}
+			}
+		},
+		"assignment": {
+			"match": "(((?:\\w+\\s*(\\.|,\\s*)\\s*)+)?\\w+)\\s*(=|\\(|{)",
+			"captures": {
+				"1": {
+					"name": "variable.name.rho"
+				}
+			}
+		},
+		"expression": {
+			"match": "(((?:\\w+\\s*\\,\\s*)+)?\\w+)",
+			"captures": {
+				"1": {
+					"name": "variable.name.rho"
+				}
+			}
+		},
+		"constant": {
+			"patterns": [
+				{
+					"name": "string.quoted.double",
+					"begin": "\"",
+					"end": "\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.rho",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "constant.numeric.rho",
+					"match": "\\b(0b|0o|0d|0x)?\\d+\\b"
+				}
+			]
+		},
+		"comment": {
+			"patterns": [
+				{
+					"name": "comment.block.rho",
+					"begin": "/\\*",
+					"end": "\\*/",
+					"patterns": [
+						{
+							"include": "#comment-tag"
+						}
+					]
+				},
+				{
+					"name": "comment.line.rho",
+					"begin": "//",
+					"end": "$",
+					"patterns": [
+						{
+							"include": "#comment-tag"
+						}
+					]
+				}
+			]
+		},
+		"comment-tag": {
+			"name": "keyword.codetag.rho",
+			"match": "\\b(?:TODO|BUG|NOTE)\\b"
+		}
+	},
+	"scopeName": "source.rho"
+}
